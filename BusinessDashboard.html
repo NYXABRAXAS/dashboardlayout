@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LOS — Business Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link href="assets/css/dashboard.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-wrapper">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon"><i class="bi bi-bank2" style="color:#fff;font-size:1.1rem"></i></div>
+    <div class="sidebar-logo-text"><span class="brand">LOS Portal</span><span class="sub">Enterprise Suite</span></div>
+  </div>
+  <div class="sidebar-nav">
+    <span class="nav-section-label">Main</span>
+    <a class="nav-link" data-page="index.html" href="index.html"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span> Overview</a>
+    <span class="nav-section-label">Departments</span>
+    <a class="nav-link" data-page="OperationDashboard.html" href="OperationDashboard.html"><span class="nav-icon"><i class="bi bi-gear-wide-connected"></i></span> Operations</a>
+    <a class="nav-link" data-page="ComplianceDashboard.html" href="ComplianceDashboard.html"><span class="nav-icon"><i class="bi bi-shield-check"></i></span> Compliance</a>
+    <a class="nav-link" data-page="CreditDashboard.html" href="CreditDashboard.html"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span> Credit</a>
+    <a class="nav-link" data-page="BusinessDashboard.html" href="BusinessDashboard.html"><span class="nav-icon"><i class="bi bi-briefcase-fill"></i></span> Business</a>
+    <a class="nav-link" data-page="SalesDashboard.html" href="SalesDashboard.html"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span> Sales</a>
+    <div class="nav-divider"></div>
+    <span class="nav-section-label">System</span>
+    <a class="nav-link" href="#"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph"></i></span> Reports</a>
+    <a class="nav-link" href="#" style="color:#ef4444"><span class="nav-icon"><i class="bi bi-box-arrow-right"></i></span> Logout</a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background:linear-gradient(135deg,#0f2b5b,#1565c0)">BZ</div>
+      <div class="sidebar-user-info"><div class="u-name">Business Team</div><div class="u-role">Business Manager</div></div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-content">
+  <header class="topbar">
+    <button class="topbar-toggle" id="sidebar-toggle"><i class="bi bi-list"></i></button>
+    <div class="topbar-breadcrumb">
+      <span>LOS Portal</span><span class="crumb-sep">›</span>
+      <span class="crumb-active">Business Dashboard</span>
+    </div>
+    <div class="topbar-spacer"></div>
+    <span class="topbar-clock js-clock">00:00:00</span>
+    <span class="topbar-date js-date"></span>
+    <button class="topbar-btn"><i class="bi bi-bell"></i><span class="notif-dot"></span></button>
+    <div class="topbar-avatar" style="background:linear-gradient(135deg,#0f2b5b,#1565c0)">BZ</div>
+  </header>
+
+  <main class="page-content">
+    <!-- BANNER -->
+    <div class="page-banner banner-blue">
+      <div class="row row-2" style="align-items:center">
+        <div class="page-banner-inner">
+          <div class="page-banner-badge"><i class="bi bi-briefcase-fill"></i> Business Department</div>
+          <h1>Business Dashboard</h1>
+          <div class="page-banner-sub">Portfolio Management · Lead Tracking · Disbursement · Performance</div>
+          <div class="page-banner-meta">
+            <span class="page-banner-pill"><i class="bi bi-people-fill"></i> Leads</span>
+            <span class="page-banner-pill"><i class="bi bi-cash-coin"></i> Disbursement</span>
+            <span class="page-banner-pill"><i class="bi bi-pie-chart-fill"></i> Portfolio</span>
+            <span class="page-banner-pill"><i class="bi bi-geo-alt-fill"></i> Geography</span>
+          </div>
+        </div>
+        <div class="page-banner-right">
+          <div class="banner-datetime">
+            <div class="b-time js-banner-time">00:00:00</div>
+            <div class="b-date js-banner-date"></div>
+          </div>
+          <div class="banner-actions">
+            <button class="banner-btn" onclick="refreshData()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+            <button class="banner-btn"><i class="bi bi-download"></i> Export</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI ROW 1 -->
+    <div class="section-label"><i class="bi bi-speedometer2"></i> Business KPIs</div>
+    <div class="kpi-grid kpi-grid-4">
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-blue"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-blue"><i class="bi bi-collection-fill"></i></div>
+          <span class="kpi-badge bdg-blue">Total</span>
+        </div>
+        <div class="kpi-label">Total Cases</div>
+        <div class="kpi-value" id="biz_total_cases">—</div>
+        <div class="kpi-footer"><i class="bi bi-layers"></i> All business cases</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-green"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-green"><i class="bi bi-cash-stack"></i></div>
+          <span class="kpi-badge bdg-green">₹</span>
+        </div>
+        <div class="kpi-label">Total Disbursed Amount</div>
+        <div class="kpi-value" id="biz_disb_amount" style="font-size:1.35rem">—</div>
+        <div class="kpi-footer"><i class="bi bi-arrow-up-right trend-up"></i> Month-to-date disbursement</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-teal"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-teal"><i class="bi bi-check-circle-fill"></i></div>
+          <span class="kpi-badge bdg-teal">Disbursed</span>
+        </div>
+        <div class="kpi-label">Disbursed Cases</div>
+        <div class="kpi-value" id="biz_disb_cases">—</div>
+        <div class="kpi-footer"><i class="bi bi-arrow-up-right trend-up"></i> Successfully disbursed</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-red"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-red"><i class="bi bi-x-circle-fill"></i></div>
+          <span class="kpi-badge bdg-red">Declined</span>
+        </div>
+        <div class="kpi-label">Declined Cases</div>
+        <div class="kpi-value" id="biz_declined_cases">—</div>
+        <div class="kpi-footer"><i class="bi bi-arrow-down-right trend-down"></i> Rejected applications</div>
+      </div>
+    </div>
+
+    <!-- KPI ROW 2 -->
+    <div class="kpi-grid kpi-grid-4 mt-sm">
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-purple"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-purple"><i class="bi bi-people-fill"></i></div>
+          <span class="kpi-badge bdg-purple">Leads</span>
+        </div>
+        <div class="kpi-label">Total Lead Pending</div>
+        <div class="kpi-value" id="biz_lead_pending">—</div>
+        <div class="kpi-footer"><i class="bi bi-hourglass-split"></i> Unprocessed leads</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-indigo"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-indigo"><i class="bi bi-chat-dots-fill"></i></div>
+          <span class="kpi-badge bdg-indigo">Queries</span>
+        </div>
+        <div class="kpi-label">Pending Queries</div>
+        <div class="kpi-value" id="biz_query_pending">—</div>
+        <div class="kpi-footer"><i class="bi bi-question-circle"></i> Awaiting clarification</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-green"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-green"><i class="bi bi-percent"></i></div>
+          <span class="kpi-badge bdg-green">Rate</span>
+        </div>
+        <div class="kpi-label">Disbursed %</div>
+        <div class="kpi-value" id="biz_disb_pct">—</div>
+        <div class="kpi-footer"><i class="bi bi-bar-chart"></i> Disbursement success rate</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-red"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-red"><i class="bi bi-percent"></i></div>
+          <span class="kpi-badge bdg-red">Rate</span>
+        </div>
+        <div class="kpi-label">Declined %</div>
+        <div class="kpi-value" id="biz_declined_pct">—</div>
+        <div class="kpi-footer"><i class="bi bi-bar-chart"></i> Rejection rate</div>
+      </div>
+    </div>
+
+    <!-- STAGE PIPELINE -->
+    <div class="section-label"><i class="bi bi-diagram-3-fill"></i> Stage-wise Pending</div>
+    <div class="stage-grid">
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-amber)"></div>
+        <div class="stage-icon-wrap" style="background:#fffbeb"><i class="bi bi-shield-check" style="color:var(--c-amber);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-amber)" id="biz_dd_pending">—</div>
+        <div class="stage-lbl">Due Diligence</div>
+        <div class="stage-sub" style="color:var(--c-amber)">Compliance review</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="bbar_dd" style="background:var(--c-amber);width:0%"></div></div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-purple)"></div>
+        <div class="stage-icon-wrap" style="background:#f5f3ff"><i class="bi bi-graph-up-arrow" style="color:var(--c-purple);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-purple)" id="biz_credit_pending">—</div>
+        <div class="stage-lbl">Credit Pending</div>
+        <div class="stage-sub" style="color:var(--c-purple)">Credit assessment</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="bbar_cr" style="background:var(--c-purple);width:0%"></div></div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-blue)"></div>
+        <div class="stage-icon-wrap" style="background:#eff6ff"><i class="bi bi-briefcase-fill" style="color:var(--c-blue);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-blue)" id="biz_biz_pending">—</div>
+        <div class="stage-lbl">Business Pending</div>
+        <div class="stage-sub" style="color:var(--c-blue)">Business approval</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="bbar_biz" style="background:var(--c-blue);width:0%"></div></div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-teal)"></div>
+        <div class="stage-icon-wrap" style="background:#ecfeff"><i class="bi bi-cash-coin" style="color:var(--c-teal);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-teal)" id="biz_disb_pending">—</div>
+        <div class="stage-lbl">Disbursement Pending</div>
+        <div class="stage-sub" style="color:var(--c-teal)">Final stage</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="bbar_dsb" style="background:var(--c-teal);width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="section-label"><i class="bi bi-bar-chart-fill"></i> Business Analytics</div>
+    <div class="row row-2">
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-pie-chart-fill card-icon" style="color:var(--c-blue)"></i>
+          <span class="card-title">Disbursed vs Declined</span>
+        </div>
+        <div class="card-body">
+          <div id="chart-biz-donut" style="min-height:260px"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-bar-chart-fill card-icon" style="color:var(--c-teal)"></i>
+          <span class="card-title">Monthly Disbursement Trend</span>
+        </div>
+        <div class="card-body">
+          <div id="chart-biz-trend" style="min-height:260px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT TABLE -->
+    <div class="section-label"><i class="bi bi-table"></i> Product-wise Summary</div>
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-grid-3x3-gap-fill card-icon" style="color:var(--c-blue)"></i>
+        <span class="card-title">Product Performance</span>
+        <span class="card-header-badge bdg-blue">This Month</span>
+      </div>
+      <div class="card-body" style="padding:0">
+        <table class="status-table">
+          <thead>
+            <tr>
+              <th>Product</th><th>Total Cases</th><th>Disbursed</th><th>Declined</th>
+              <th>Avg Ticket Size</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Home Loan</strong></td><td>84</td><td>62</td><td>8</td><td>₹32.4 L</td><td><span class="tbl-badge b-green">On Track</span></td></tr>
+            <tr><td><strong>LAP</strong></td><td>67</td><td>45</td><td>11</td><td>₹48.7 L</td><td><span class="tbl-badge b-green">On Track</span></td></tr>
+            <tr><td><strong>Business Loan</strong></td><td>52</td><td>31</td><td>9</td><td>₹18.2 L</td><td><span class="tbl-badge b-amber">Review</span></td></tr>
+            <tr><td><strong>Personal Loan</strong></td><td>45</td><td>28</td><td>12</td><td>₹4.8 L</td><td><span class="tbl-badge b-amber">Review</span></td></tr>
+            <tr><td><strong>MSME Loan</strong></td><td>38</td><td>22</td><td>7</td><td>₹24.1 L</td><td><span class="tbl-badge b-green">On Track</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <span>LOS Enterprise Suite &copy; 2025 — <strong>Business Dashboard</strong></span>
+    <span>v2.0 · Static Edition</span>
+  </footer>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.48.0/dist/apexcharts.min.js"></script>
+<script src="assets/js/dashboard.js"></script>
+<script>
+var demo = {
+  biz_total:286, biz_disb_amt:184500000, biz_disb_cases:188, biz_declined:47,
+  biz_lead:54, biz_query:28, biz_dd:72, biz_cr:45, biz_biz:38, biz_dsb:89
+};
+
+function bindKPIs(d) {
+  LOS.animateNum(document.getElementById('biz_total_cases'), d.biz_total);
+  document.getElementById('biz_disb_amount').textContent = LOS.fmtINR(d.biz_disb_amt);
+  LOS.animateNum(document.getElementById('biz_disb_cases'), d.biz_disb_cases);
+  LOS.animateNum(document.getElementById('biz_declined_cases'), d.biz_declined);
+  LOS.animateNum(document.getElementById('biz_lead_pending'), d.biz_lead);
+  LOS.animateNum(document.getElementById('biz_query_pending'), d.biz_query);
+
+  var total = d.biz_disb_cases + d.biz_declined || 1;
+  var dPct  = Math.round(d.biz_disb_cases / total * 100);
+  var decPct= Math.round(d.biz_declined   / total * 100);
+  document.getElementById('biz_disb_pct').textContent    = dPct + '%';
+  document.getElementById('biz_declined_pct').textContent= decPct + '%';
+
+  // Stage
+  document.getElementById('biz_dd_pending').textContent   = d.biz_dd;
+  document.getElementById('biz_credit_pending').textContent= d.biz_cr;
+  document.getElementById('biz_biz_pending').textContent  = d.biz_biz;
+  document.getElementById('biz_disb_pending').textContent = d.biz_dsb;
+
+  var vals = [d.biz_dd, d.biz_cr, d.biz_biz, d.biz_dsb];
+  var mx = Math.max.apply(null, vals) || 1;
+  ['bbar_dd','bbar_cr','bbar_biz','bbar_dsb'].forEach(function(id,i){
+    var el = document.getElementById(id);
+    if(el) el.style.width = Math.round(vals[i]/mx*100)+'%';
+  });
+}
+bindKPIs(demo);
+
+new ApexCharts(document.getElementById('chart-biz-donut'), {
+  chart:{type:'donut',height:260,fontFamily:"'Inter',sans-serif"},
+  series:[188,47,51],
+  labels:['Disbursed','Declined','In Pipeline'],
+  colors:['#059669','#dc2626','#1d4ed8'],
+  plotOptions:{pie:{donut:{size:'62%', labels:{show:true,total:{show:true,label:'Total',fontSize:'13px',fontWeight:700,color:'#1e293b',formatter:function(){return 286;}}}}}},
+  legend:{position:'bottom',fontSize:'11px'},dataLabels:{enabled:false}
+}).render();
+
+new ApexCharts(document.getElementById('chart-biz-trend'), {
+  chart:{type:'area',height:260,toolbar:{show:false},fontFamily:"'Inter',sans-serif"},
+  series:[
+    {name:'Disbursed Cases',data:[32,41,28,55,48,39,45]},
+    {name:'Disbursed ₹ (L)', data:[86,112,74,148,131,104,122]}
+  ],
+  xaxis:{categories:['Jan','Feb','Mar','Apr','May','Jun','Jul'],labels:{style:{colors:'#64748b',fontSize:'11px'}}},
+  colors:['#059669','#1d4ed8'],
+  stroke:{curve:'smooth',width:2},
+  fill:{type:'gradient',gradient:{opacityFrom:.2,opacityTo:.02}},
+  yaxis:[
+    {labels:{style:{colors:'#059669',fontSize:'11px'}}},
+    {opposite:true,labels:{style:{colors:'#1d4ed8',fontSize:'11px'}}}
+  ],
+  legend:{position:'top',fontSize:'11px'},dataLabels:{enabled:false},
+  grid:{borderColor:'#f1f5f9'}
+}).render();
+
+function refreshData(){ bindKPIs(demo); }
+</script>
+</body>
+</html>
