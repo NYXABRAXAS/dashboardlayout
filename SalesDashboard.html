@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LOS — Sales Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link href="assets/css/dashboard.css" rel="stylesheet"/>
+<style>
+/* SLA Ring */
+.sla-ring-svg { width:110px; height:110px; transform:rotate(-90deg); }
+.sla-ring-bg   { fill:none; stroke:#e2e8f0; stroke-width:10; }
+.sla-ring-fill { fill:none; stroke-width:10; stroke-linecap:round;
+                 stroke-dasharray:283; stroke-dashoffset:283;
+                 transition:stroke-dashoffset .9s ease, stroke .4s ease; }
+</style>
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-wrapper">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon"><i class="bi bi-bank2" style="color:#fff;font-size:1.1rem"></i></div>
+    <div class="sidebar-logo-text"><span class="brand">LOS Portal</span><span class="sub">Enterprise Suite</span></div>
+  </div>
+  <div class="sidebar-nav">
+    <span class="nav-section-label">Main</span>
+    <a class="nav-link" data-page="index.html" href="index.html"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span> Overview</a>
+    <span class="nav-section-label">Departments</span>
+    <a class="nav-link" data-page="OperationDashboard.html" href="OperationDashboard.html"><span class="nav-icon"><i class="bi bi-gear-wide-connected"></i></span> Operations</a>
+    <a class="nav-link" data-page="ComplianceDashboard.html" href="ComplianceDashboard.html"><span class="nav-icon"><i class="bi bi-shield-check"></i></span> Compliance</a>
+    <a class="nav-link" data-page="CreditDashboard.html" href="CreditDashboard.html"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span> Credit</a>
+    <a class="nav-link" data-page="BusinessDashboard.html" href="BusinessDashboard.html"><span class="nav-icon"><i class="bi bi-briefcase-fill"></i></span> Business</a>
+    <a class="nav-link" data-page="SalesDashboard.html" href="SalesDashboard.html"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span> Sales</a>
+    <div class="nav-divider"></div>
+    <span class="nav-section-label">System</span>
+    <a class="nav-link" href="#"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph"></i></span> Reports</a>
+    <a class="nav-link" href="#" style="color:#ef4444"><span class="nav-icon"><i class="bi bi-box-arrow-right"></i></span> Logout</a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background:linear-gradient(135deg,#065f46,#059669)">SO</div>
+      <div class="sidebar-user-info"><div class="u-name">Sales Team</div><div class="u-role">Sales Officer</div></div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-content">
+  <header class="topbar">
+    <button class="topbar-toggle" id="sidebar-toggle"><i class="bi bi-list"></i></button>
+    <div class="topbar-breadcrumb">
+      <span>LOS Portal</span><span class="crumb-sep">›</span>
+      <span class="crumb-active">Sales Dashboard</span>
+    </div>
+    <div class="topbar-spacer"></div>
+    <span class="topbar-clock js-clock">00:00:00</span>
+    <span class="topbar-date js-date"></span>
+    <button class="topbar-btn"><i class="bi bi-bell"></i><span class="notif-dot"></span></button>
+    <div class="topbar-avatar" style="background:linear-gradient(135deg,#065f46,#059669)">SO</div>
+  </header>
+
+  <main class="page-content">
+    <!-- BANNER -->
+    <div class="page-banner banner-green">
+      <div class="row row-2" style="align-items:center">
+        <div class="page-banner-inner">
+          <div class="page-banner-badge"><i class="bi bi-bar-chart-line-fill"></i> Sales Officer</div>
+          <h1>Sales Dashboard</h1>
+          <div class="page-banner-sub">Lead Management · Pipeline Tracking · SLA Monitoring · Performance</div>
+          <div class="page-banner-meta">
+            <span class="page-banner-pill"><i class="bi bi-people-fill"></i> Leads</span>
+            <span class="page-banner-pill"><i class="bi bi-chat-dots-fill"></i> Queries</span>
+            <span class="page-banner-pill"><i class="bi bi-file-earmark-text"></i> Documents</span>
+            <span class="page-banner-pill"><i class="bi bi-stopwatch-fill"></i> SLA</span>
+          </div>
+        </div>
+        <div class="page-banner-right">
+          <div class="banner-datetime">
+            <div class="b-time js-banner-time">00:00:00</div>
+            <div class="b-date js-banner-date"></div>
+          </div>
+          <div class="banner-actions">
+            <button class="banner-btn" onclick="refreshData()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+            <button class="banner-btn"><i class="bi bi-download"></i> Export</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI ROW 1: Pending KPIs -->
+    <div class="section-label"><i class="bi bi-speedometer2"></i> Pending KPIs</div>
+    <div class="kpi-grid kpi-grid-4">
+      <!-- 1. Total Lead Pending -->
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-green"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-green"><i class="bi bi-people-fill"></i></div>
+          <span class="kpi-badge bdg-green">Pending</span>
+        </div>
+        <div class="kpi-label">Total Lead Pending</div>
+        <div class="kpi-value" id="sl_total_lead_pending">—</div>
+        <div class="kpi-footer"><i class="bi bi-hourglass-split"></i> Unprocessed leads</div>
+      </div>
+      <!-- 2. Total Query Pending -->
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-blue"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-blue"><i class="bi bi-chat-dots-fill"></i></div>
+          <span class="kpi-badge bdg-blue">Pending</span>
+        </div>
+        <div class="kpi-label">Total Query Pending</div>
+        <div class="kpi-value" id="sl_total_query_pending">—</div>
+        <div class="kpi-footer"><i class="bi bi-question-circle"></i> Awaiting query response</div>
+      </div>
+      <!-- 3. Document Request Pending -->
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-amber"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-amber"><i class="bi bi-file-earmark-text-fill"></i></div>
+          <span class="kpi-badge bdg-amber">Pending</span>
+        </div>
+        <div class="kpi-label">Total Document Request Pending</div>
+        <div class="kpi-value" id="sl_total_doc_pending">—</div>
+        <div class="kpi-footer"><i class="bi bi-paperclip"></i> Awaiting document upload</div>
+      </div>
+      <!-- 4. SLA -->
+      <div class="kpi-card">
+        <div class="kpi-card-accent" id="sl_sla_accent" style="background:var(--c-green)"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-green"><i class="bi bi-stopwatch-fill"></i></div>
+          <span class="kpi-badge bdg-green" id="sl_sla_badge">On Track</span>
+        </div>
+        <div class="kpi-label">SLA Compliance</div>
+        <div class="kpi-value" id="sl_sla">—</div>
+        <div class="kpi-footer"><i class="bi bi-clock-history"></i> Service level adherence</div>
+      </div>
+    </div>
+
+    <!-- KPI ROW 2: Disbursement & Decline KPIs -->
+    <div class="section-label"><i class="bi bi-cash-coin"></i> Disbursement &amp; Decline KPIs</div>
+    <div class="kpi-grid kpi-grid-4" style="grid-template-columns:repeat(5,1fr)">
+      <!-- 5. Total Disbursed Amount -->
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-green"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-green"><i class="bi bi-cash-stack"></i></div>
+          <span class="kpi-badge bdg-green">₹</span>
+        </div>
+        <div class="kpi-label">Total Disbursed Amount</div>
+        <div class="kpi-value" id="sl_disbursed_amount" style="font-size:1.3rem">—</div>
+        <div class="kpi-footer"><i class="bi bi-arrow-up-right trend-up"></i> Month-to-date</div>
+      </div>
+      <!-- 6. Total Disbursed Cases -->
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-teal"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-teal"><i class="bi bi-check-circle-fill"></i></div>
+          <span class="kpi-badge bdg-teal">Done</span>
+        </div>
+        <div class="kpi-label">Total Disbursed Cases</div>
+        <div class="kpi-value" id="sl_disbursed_cases">—</div>
+        <div class="kpi-footer"><i class="bi bi-arrow-up-right trend-up"></i> Successful loans</div>
+      </div>
+      <!-- 7. Total Declined Cases -->
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-red"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-red"><i class="bi bi-x-circle-fill"></i></div>
+          <span class="kpi-badge bdg-red">Declined</span>
+        </div>
+        <div class="kpi-label">Total Declined Cases</div>
+        <div class="kpi-value" id="sl_declined_cases">—</div>
+        <div class="kpi-footer"><i class="bi bi-arrow-down-right trend-down"></i> Rejected applications</div>
+      </div>
+      <!-- 8. Disbursed Percentage -->
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-green"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-green"><i class="bi bi-percent"></i></div>
+          <span class="kpi-badge bdg-green">Rate</span>
+        </div>
+        <div class="kpi-label">Disbursed Percentage</div>
+        <div class="kpi-value" id="sl_disbursed_pct">—</div>
+        <div class="kpi-footer"><i class="bi bi-bar-chart"></i> Approval-to-disburse rate</div>
+      </div>
+      <!-- 9. Declined Percentage -->
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-red"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-red"><i class="bi bi-percent"></i></div>
+          <span class="kpi-badge bdg-red">Rate</span>
+        </div>
+        <div class="kpi-label">Declined Percentage</div>
+        <div class="kpi-value" id="sl_declined_pct">—</div>
+        <div class="kpi-footer"><i class="bi bi-bar-chart"></i> Overall rejection rate</div>
+      </div>
+    </div>
+
+    <!-- STAGE-WISE PENDING -->
+    <div class="section-label"><i class="bi bi-diagram-3-fill"></i> Stage-wise Pending</div>
+    <div class="stage-grid">
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-amber)"></div>
+        <div class="stage-icon-wrap" style="background:#fffbeb"><i class="bi bi-shield-check" style="color:var(--c-amber);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-amber)" id="sl_dd_pending">—</div>
+        <div class="stage-lbl">Due Diligence Pending</div>
+        <div class="stage-sub" style="color:var(--c-amber)">Compliance review</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="sl_dd_bar" style="background:var(--c-amber);width:0%"></div></div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-purple)"></div>
+        <div class="stage-icon-wrap" style="background:#f5f3ff"><i class="bi bi-graph-up-arrow" style="color:var(--c-purple);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-purple)" id="sl_credit_pending">—</div>
+        <div class="stage-lbl">Credit Pending</div>
+        <div class="stage-sub" style="color:var(--c-purple)">Credit assessment</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="sl_credit_bar" style="background:var(--c-purple);width:0%"></div></div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-blue)"></div>
+        <div class="stage-icon-wrap" style="background:#eff6ff"><i class="bi bi-briefcase-fill" style="color:var(--c-blue);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-blue)" id="sl_business_pending">—</div>
+        <div class="stage-lbl">Business Pending</div>
+        <div class="stage-sub" style="color:var(--c-blue)">Business approval</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="sl_business_bar" style="background:var(--c-blue);width:0%"></div></div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-green)"></div>
+        <div class="stage-icon-wrap" style="background:#ecfdf5"><i class="bi bi-cash-coin" style="color:var(--c-green);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-green)" id="sl_disbursement_pending">—</div>
+        <div class="stage-lbl">Disbursement Pending</div>
+        <div class="stage-sub" style="color:var(--c-green)">Ready to disburse</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="sl_disbursement_bar" style="background:var(--c-green);width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="section-label"><i class="bi bi-bar-chart-fill"></i> Sales Analytics</div>
+    <div class="row row-2">
+      <!-- Donut: Disbursed vs Declined -->
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-pie-chart-fill card-icon" style="color:var(--c-green)"></i>
+          <span class="card-title">Disbursed vs Declined</span>
+        </div>
+        <div class="card-body">
+          <div id="chart-sl-donut" style="min-height:260px"></div>
+        </div>
+      </div>
+      <!-- Bar: Stage-wise Pending -->
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-bar-chart-fill card-icon" style="color:var(--c-blue)"></i>
+          <span class="card-title">Stage-wise Pending</span>
+        </div>
+        <div class="card-body">
+          <div id="chart-sl-stage" style="min-height:260px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLA GAUGE + PERFORMANCE SUMMARY -->
+    <div class="row row-2 mt-md">
+      <!-- SLA Gauge -->
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-stopwatch-fill card-icon" style="color:var(--c-green)"></i>
+          <span class="card-title">SLA Monitor</span>
+          <span class="card-header-badge bdg-green" id="sl_sla_gauge_badge">On Track</span>
+        </div>
+        <div class="card-body">
+          <div class="sla-gauge-wrap">
+            <div class="sla-ring">
+              <svg class="sla-ring-svg" viewBox="0 0 110 110">
+                <circle class="sla-ring-bg"   cx="55" cy="55" r="45"/>
+                <circle class="sla-ring-fill" id="sl_gauge_fill" cx="55" cy="55" r="45"/>
+              </svg>
+              <div class="sla-ring-center">
+                <div class="sla-ring-pct" id="sl_gauge_pct">—</div>
+                <div class="sla-ring-lbl">SLA</div>
+              </div>
+            </div>
+            <div class="sla-legend">
+              <div class="sla-leg-item">
+                <div class="sla-leg-dot" style="background:var(--c-green)"></div>
+                <div class="sla-leg-lbl">Within SLA</div>
+                <div class="sla-leg-val" id="sl_within_sla" style="color:var(--c-green)">—</div>
+              </div>
+              <div class="sla-leg-item">
+                <div class="sla-leg-dot" style="background:var(--c-red)"></div>
+                <div class="sla-leg-lbl">Breached SLA</div>
+                <div class="sla-leg-val" id="sl_breach_sla" style="color:var(--c-red)">—</div>
+              </div>
+              <div class="sla-leg-item">
+                <div class="sla-leg-dot" style="background:var(--c-amber)"></div>
+                <div class="sla-leg-lbl">At Risk</div>
+                <div class="sla-leg-val" id="sl_risk_sla" style="color:var(--c-amber)">—</div>
+              </div>
+              <div class="sla-leg-item">
+                <div class="sla-leg-dot" style="background:var(--c-blue)"></div>
+                <div class="sla-leg-lbl">Total Tracked</div>
+                <div class="sla-leg-val" id="sl_total_sla" style="color:var(--c-blue)">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Summary -->
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-trophy-fill card-icon" style="color:var(--c-amber)"></i>
+          <span class="card-title">Performance Summary</span>
+        </div>
+        <div class="card-body">
+          <div class="perf-row">
+            <div class="perf-dot" style="background:var(--c-green)"></div>
+            <div class="perf-lbl">Lead Conversion</div>
+            <div class="perf-bar-wrap"><div class="perf-bar-fill" id="pf_conversion" style="background:var(--c-green);width:0%"></div></div>
+            <div class="perf-val" id="pf_conversion_v" style="color:var(--c-green)">—</div>
+          </div>
+          <div class="perf-row">
+            <div class="perf-dot" style="background:var(--c-blue)"></div>
+            <div class="perf-lbl">Query Resolution</div>
+            <div class="perf-bar-wrap"><div class="perf-bar-fill" id="pf_query" style="background:var(--c-blue);width:0%"></div></div>
+            <div class="perf-val" id="pf_query_v" style="color:var(--c-blue)">—</div>
+          </div>
+          <div class="perf-row">
+            <div class="perf-dot" style="background:var(--c-amber)"></div>
+            <div class="perf-lbl">Doc Submission Rate</div>
+            <div class="perf-bar-wrap"><div class="perf-bar-fill" id="pf_doc" style="background:var(--c-amber);width:0%"></div></div>
+            <div class="perf-val" id="pf_doc_v" style="color:var(--c-amber)">—</div>
+          </div>
+          <div class="perf-row">
+            <div class="perf-dot" style="background:var(--c-purple)"></div>
+            <div class="perf-lbl">Pipeline Progression</div>
+            <div class="perf-bar-wrap"><div class="perf-bar-fill" id="pf_pipeline" style="background:var(--c-purple);width:0%"></div></div>
+            <div class="perf-val" id="pf_pipeline_v" style="color:var(--c-purple)">—</div>
+          </div>
+          <div class="perf-row">
+            <div class="perf-dot" style="background:var(--c-teal)"></div>
+            <div class="perf-lbl">Disbursement Rate</div>
+            <div class="perf-bar-wrap"><div class="perf-bar-fill" id="pf_disburse" style="background:var(--c-teal);width:0%"></div></div>
+            <div class="perf-val" id="pf_disburse_v" style="color:var(--c-teal)">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <span>LOS Enterprise Suite &copy; 2025 — <strong>Sales Officer Dashboard</strong></span>
+    <span>v2.0 · Static Edition</span>
+  </footer>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.48.0/dist/apexcharts.min.js"></script>
+<script src="assets/js/dashboard.js"></script>
+<script>
+/* Demo data — replace with /reports/sales_getkpisummary response */
+var demo = {
+  sl_total_lead_pending:    54,
+  sl_total_query_pending:   28,
+  sl_total_doc_pending:     36,
+  sl_sla:                   82,
+  sl_disbursed_amount:      112400000,
+  sl_disbursed_cases:       143,
+  sl_declined_cases:        31,
+  sl_disbursed_pct:         82,
+  sl_declined_pct:          18,
+  sl_dd_pending:            48,
+  sl_credit_pending:        35,
+  sl_business_pending:      29,
+  sl_disbursement_pending:  72
+};
+
+var donutChart = null;
+var stageChart = null;
+
+function renderDonut(disbCases, declCases) {
+  var el = document.getElementById('chart-sl-donut');
+  if (!el) return;
+  if (donutChart) { donutChart.destroy(); donutChart = null; }
+  donutChart = new ApexCharts(el, {
+    chart: { type: 'donut', height: 260, fontFamily: "'Inter',sans-serif" },
+    series: [disbCases, declCases],
+    labels: ['Disbursed Cases', 'Declined Cases'],
+    colors: ['#059669', '#dc2626'],
+    plotOptions: { pie: { donut: {
+      size: '62%',
+      labels: { show: true, total: { show: true, label: 'Total', fontSize: '13px', fontWeight: 700,
+        color: '#1e293b', formatter: function(w) { return w.globals.seriesTotals.reduce(function(a,b){return a+b;},0); }
+      }}
+    }}},
+    legend: { position: 'bottom', fontSize: '11px' },
+    dataLabels: { enabled: true, formatter: function(val){ return Math.round(val)+'%'; },
+      style: { fontSize: '11px', fontFamily: "'Inter',sans-serif" }
+    }
+  });
+  donutChart.render();
+}
+
+function renderStageBar(dd, cr, biz, dsb) {
+  var el = document.getElementById('chart-sl-stage');
+  if (!el) return;
+  if (stageChart) { stageChart.destroy(); stageChart = null; }
+  stageChart = new ApexCharts(el, {
+    chart: { type: 'bar', height: 260, toolbar: { show: false }, fontFamily: "'Inter',sans-serif" },
+    series: [{ name: 'Pending Cases', data: [dd, cr, biz, dsb] }],
+    xaxis: {
+      categories: ['Due Diligence', 'Credit', 'Business', 'Disbursement'],
+      labels: { style: { colors: '#64748b', fontSize: '11px' } }
+    },
+    colors: ['#d97706', '#7c3aed', '#1d4ed8', '#059669'],
+    plotOptions: { bar: { columnWidth: '50%', borderRadius: 5, distributed: true } },
+    legend: { show: false },
+    dataLabels: { enabled: true, style: { fontSize: '11px', colors: ['#fff'] } },
+    grid: { borderColor: '#f1f5f9' }
+  });
+  stageChart.render();
+}
+
+function renderSLAGauge(pct) {
+  var circumference = 2 * Math.PI * 45;
+  var fill   = document.getElementById('sl_gauge_fill');
+  var pctEl  = document.getElementById('sl_gauge_pct');
+  var badge  = document.getElementById('sl_sla_badge');
+  var kbadge = document.getElementById('sl_sla_badge');
+  var accent = document.getElementById('sl_sla_accent');
+  if (!fill || !pctEl) return;
+
+  fill.setAttribute('stroke-dasharray', circumference);
+  var offset = circumference - (pct / 100) * circumference;
+  fill.setAttribute('stroke-dashoffset', offset);
+
+  var color = pct >= 80 ? '#059669' : pct >= 60 ? '#d97706' : '#dc2626';
+  fill.setAttribute('stroke', color);
+  pctEl.textContent = Math.round(pct) + '%';
+  pctEl.style.color = color;
+
+  var label = pct >= 80 ? 'On Track' : pct >= 60 ? 'At Risk' : 'Breached';
+  if (badge) badge.textContent = label;
+  if (kbadge) kbadge.textContent = label;
+  if (document.getElementById('sl_sla_gauge_badge'))
+    document.getElementById('sl_sla_gauge_badge').textContent = label;
+}
+
+function bindKPIs(d) {
+  /* — Pending KPIs — */
+  LOS.animateNum(document.getElementById('sl_total_lead_pending'), d.sl_total_lead_pending);
+  LOS.animateNum(document.getElementById('sl_total_query_pending'), d.sl_total_query_pending);
+  LOS.animateNum(document.getElementById('sl_total_doc_pending'), d.sl_total_doc_pending);
+  document.getElementById('sl_sla').textContent = d.sl_sla + '%';
+
+  /* — Disbursement KPIs — */
+  document.getElementById('sl_disbursed_amount').textContent = LOS.fmtINR(d.sl_disbursed_amount);
+  LOS.animateNum(document.getElementById('sl_disbursed_cases'), d.sl_disbursed_cases);
+  LOS.animateNum(document.getElementById('sl_declined_cases'),  d.sl_declined_cases);
+  document.getElementById('sl_disbursed_pct').textContent = d.sl_disbursed_pct + '%';
+  document.getElementById('sl_declined_pct').textContent  = d.sl_declined_pct  + '%';
+
+  /* — Stage-wise — */
+  document.getElementById('sl_dd_pending').textContent           = d.sl_dd_pending;
+  document.getElementById('sl_credit_pending').textContent       = d.sl_credit_pending;
+  document.getElementById('sl_business_pending').textContent     = d.sl_business_pending;
+  document.getElementById('sl_disbursement_pending').textContent = d.sl_disbursement_pending;
+
+  var stageVals = [d.sl_dd_pending, d.sl_credit_pending, d.sl_business_pending, d.sl_disbursement_pending];
+  var mx = Math.max.apply(null, stageVals) || 1;
+  ['sl_dd_bar','sl_credit_bar','sl_business_bar','sl_disbursement_bar'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (el) el.style.width = Math.round(stageVals[i] / mx * 100) + '%';
+  });
+
+  /* — SLA Gauge — */
+  renderSLAGauge(d.sl_sla);
+  var total = d.sl_disbursed_cases + d.sl_declined_cases || 1;
+  document.getElementById('sl_within_sla').textContent = Math.round(total * d.sl_sla / 100);
+  document.getElementById('sl_breach_sla').textContent = Math.round(total * (1 - d.sl_sla / 100) * 0.5);
+  document.getElementById('sl_risk_sla').textContent   = Math.round(total * (1 - d.sl_sla / 100) * 0.5);
+  document.getElementById('sl_total_sla').textContent  = total;
+
+  /* — Performance Bars — */
+  var perf = [
+    { id: 'pf_conversion', vid: 'pf_conversion_v', val: d.sl_disbursed_pct },
+    { id: 'pf_query',      vid: 'pf_query_v',      val: 74 },
+    { id: 'pf_doc',        vid: 'pf_doc_v',         val: 68 },
+    { id: 'pf_pipeline',   vid: 'pf_pipeline_v',   val: 81 },
+    { id: 'pf_disburse',   vid: 'pf_disburse_v',   val: d.sl_disbursed_pct }
+  ];
+  perf.forEach(function(p) {
+    var bar = document.getElementById(p.id);
+    var val = document.getElementById(p.vid);
+    if (bar) bar.style.width = p.val + '%';
+    if (val) val.textContent = p.val + '%';
+  });
+
+  /* — Charts — */
+  renderDonut(d.sl_disbursed_cases, d.sl_declined_cases);
+  renderStageBar(d.sl_dd_pending, d.sl_credit_pending, d.sl_business_pending, d.sl_disbursement_pending);
+}
+
+bindKPIs(demo);
+
+function refreshData() { bindKPIs(demo); }
+</script>
+</body>
+</html>

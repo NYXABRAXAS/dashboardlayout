@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LOS — Compliance Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link href="assets/css/dashboard.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-wrapper">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon"><i class="bi bi-bank2" style="color:#fff;font-size:1.1rem"></i></div>
+    <div class="sidebar-logo-text"><span class="brand">LOS Portal</span><span class="sub">Enterprise Suite</span></div>
+  </div>
+  <div class="sidebar-nav">
+    <span class="nav-section-label">Main</span>
+    <a class="nav-link" data-page="index.html" href="index.html"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span> Overview</a>
+    <span class="nav-section-label">Departments</span>
+    <a class="nav-link" data-page="OperationDashboard.html" href="OperationDashboard.html"><span class="nav-icon"><i class="bi bi-gear-wide-connected"></i></span> Operations</a>
+    <a class="nav-link" data-page="ComplianceDashboard.html" href="ComplianceDashboard.html"><span class="nav-icon"><i class="bi bi-shield-check"></i></span> Compliance</a>
+    <a class="nav-link" data-page="CreditDashboard.html" href="CreditDashboard.html"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span> Credit</a>
+    <a class="nav-link" data-page="BusinessDashboard.html" href="BusinessDashboard.html"><span class="nav-icon"><i class="bi bi-briefcase-fill"></i></span> Business</a>
+    <a class="nav-link" data-page="SalesDashboard.html" href="SalesDashboard.html"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span> Sales</a>
+    <div class="nav-divider"></div>
+    <span class="nav-section-label">System</span>
+    <a class="nav-link" href="#"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph"></i></span> Reports</a>
+    <a class="nav-link" href="#" style="color:#ef4444"><span class="nav-icon"><i class="bi bi-box-arrow-right"></i></span> Logout</a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background:linear-gradient(135deg,#b45309,#d97706)">DD</div>
+      <div class="sidebar-user-info"><div class="u-name">DD Team</div><div class="u-role">Compliance Officer</div></div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-content">
+  <header class="topbar">
+    <button class="topbar-toggle" id="sidebar-toggle"><i class="bi bi-list"></i></button>
+    <div class="topbar-breadcrumb">
+      <span>LOS Portal</span><span class="crumb-sep">›</span>
+      <span class="crumb-active">Compliance Dashboard</span>
+    </div>
+    <div class="topbar-spacer"></div>
+    <span class="topbar-clock js-clock">00:00:00</span>
+    <span class="topbar-date js-date"></span>
+    <button class="topbar-btn"><i class="bi bi-bell"></i><span class="notif-dot"></span></button>
+    <div class="topbar-avatar" style="background:linear-gradient(135deg,#b45309,#d97706)">DD</div>
+  </header>
+
+  <main class="page-content">
+    <!-- BANNER -->
+    <div class="page-banner banner-amber">
+      <div class="row row-2" style="align-items:center">
+        <div class="page-banner-inner">
+          <div class="page-banner-badge"><i class="bi bi-shield-check"></i> Compliance / Due Diligence</div>
+          <h1>Compliance Dashboard</h1>
+          <div class="page-banner-sub">Due Diligence · Document Verification · Risk Compliance</div>
+          <div class="page-banner-meta">
+            <span class="page-banner-pill"><i class="bi bi-search"></i> Verification</span>
+            <span class="page-banner-pill"><i class="bi bi-file-earmark-text"></i> Documents</span>
+            <span class="page-banner-pill"><i class="bi bi-check-circle"></i> Clearance</span>
+          </div>
+        </div>
+        <div class="page-banner-right">
+          <div class="banner-datetime">
+            <div class="b-time js-banner-time">00:00:00</div>
+            <div class="b-date js-banner-date"></div>
+          </div>
+          <div class="banner-actions">
+            <button class="banner-btn" onclick="refreshData()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+            <button class="banner-btn"><i class="bi bi-download"></i> Export</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="section-label"><i class="bi bi-speedometer2"></i> Due Diligence KPIs</div>
+    <div class="kpi-grid kpi-grid-4">
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-amber"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-amber"><i class="bi bi-collection-fill"></i></div>
+          <span class="kpi-badge bdg-amber">Total</span>
+        </div>
+        <div class="kpi-label">Total Cases</div>
+        <div class="kpi-value" id="dd_total_cases">—</div>
+        <div class="kpi-footer"><i class="bi bi-layers"></i> All active DD cases</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-amber"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-amber"><i class="bi bi-hourglass-split"></i></div>
+          <span class="kpi-badge bdg-amber">Pending</span>
+        </div>
+        <div class="kpi-label">Pending Due Diligence</div>
+        <div class="kpi-value" id="dd_pending">—</div>
+        <div class="kpi-footer"><i class="bi bi-clock"></i> Awaiting DD review</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-blue"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-blue"><i class="bi bi-file-earmark-text-fill"></i></div>
+          <span class="kpi-badge bdg-blue">Pending</span>
+        </div>
+        <div class="kpi-label">Document Requested</div>
+        <div class="kpi-value" id="dd_doc_requested">—</div>
+        <div class="kpi-footer"><i class="bi bi-paperclip"></i> Pending document submission</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-red"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-red"><i class="bi bi-x-circle-fill"></i></div>
+          <span class="kpi-badge bdg-red">Rejected</span>
+        </div>
+        <div class="kpi-label">Compliance Reject</div>
+        <div class="kpi-value" id="dd_rejected">—</div>
+        <div class="kpi-footer"><i class="bi bi-exclamation-triangle"></i> Failed compliance check</div>
+      </div>
+    </div>
+    <!-- 5th KPI -->
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-top:.6rem">
+      <div class="kpi-card">
+        <div class="kpi-card-accent acc-green"></div>
+        <div class="kpi-card-header">
+          <div class="kpi-icon ico-green"><i class="bi bi-check-circle-fill"></i></div>
+          <span class="kpi-badge bdg-green">Cleared</span>
+        </div>
+        <div class="kpi-label">Due Diligence Done</div>
+        <div class="kpi-value" id="dd_done">—</div>
+        <div class="kpi-footer"><i class="bi bi-arrow-up-right trend-up"></i> Successfully cleared</div>
+      </div>
+      <div class="col-span-3"></div>
+    </div>
+
+    <!-- STATUS ROW -->
+    <div class="section-label"><i class="bi bi-diagram-3-fill"></i> DD Status Snapshot</div>
+    <div class="stage-grid">
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-amber)"></div>
+        <div class="stage-icon-wrap" style="background:#fffbeb"><i class="bi bi-hourglass-split" style="color:var(--c-amber);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-amber)" id="st_pending_review">—</div>
+        <div class="stage-lbl">Pending Review</div>
+        <div class="stage-sub" style="color:var(--c-amber)">Awaiting scrutiny</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="stbar_review" style="background:var(--c-amber);width:0%"></div></div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-blue)"></div>
+        <div class="stage-icon-wrap" style="background:#eff6ff"><i class="bi bi-file-earmark-text-fill" style="color:var(--c-blue);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-blue)" id="st_docs_pending">—</div>
+        <div class="stage-lbl">Documents Pending</div>
+        <div class="stage-sub" style="color:var(--c-blue)">Awaiting submission</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="stbar_docs" style="background:var(--c-blue);width:0%"></div></div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-green)"></div>
+        <div class="stage-icon-wrap" style="background:#ecfdf5"><i class="bi bi-check-circle-fill" style="color:var(--c-green);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-green)" id="st_cleared">—</div>
+        <div class="stage-lbl">Cleared Cases</div>
+        <div class="stage-sub" style="color:var(--c-green)">DD approved</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="stbar_cleared" style="background:var(--c-green);width:0%"></div></div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-top" style="background:var(--c-red)"></div>
+        <div class="stage-icon-wrap" style="background:#fef2f2"><i class="bi bi-x-circle-fill" style="color:var(--c-red);font-size:1.3rem"></i></div>
+        <div class="stage-num" style="color:var(--c-red)" id="st_rejected">—</div>
+        <div class="stage-lbl">Rejected</div>
+        <div class="stage-sub" style="color:var(--c-red)">Compliance failure</div>
+        <div class="stage-bar"><div class="stage-bar-fill" id="stbar_rejected" style="background:var(--c-red);width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- CHARTS + CHECKLIST -->
+    <div class="section-label"><i class="bi bi-bar-chart-fill"></i> Analytics &amp; Compliance</div>
+    <div class="row row-3-1">
+      <div class="row row-2">
+        <div class="card">
+          <div class="card-header">
+            <i class="bi bi-pie-chart-fill card-icon" style="color:var(--c-amber)"></i>
+            <span class="card-title">DD Status Distribution</span>
+          </div>
+          <div class="card-body">
+            <div id="chart-dd-donut" style="min-height:250px"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <i class="bi bi-bar-chart-fill card-icon" style="color:var(--c-blue)"></i>
+            <span class="card-title">Weekly DD Trend</span>
+          </div>
+          <div class="card-body">
+            <div id="chart-dd-trend" style="min-height:250px"></div>
+          </div>
+        </div>
+        <!-- Alerts -->
+        <div class="card col-span-2">
+          <div class="card-header">
+            <i class="bi bi-exclamation-triangle-fill card-icon" style="color:var(--c-amber)"></i>
+            <span class="card-title">Compliance Alerts</span>
+          </div>
+          <div class="card-body">
+            <div class="row row-2">
+              <div>
+                <div class="alert-item a-red">
+                  <i class="bi bi-x-circle-fill" style="color:var(--c-red);font-size:1rem;flex-shrink:0"></i>
+                  <div><div class="alert-title">KYC Expiry</div><div class="alert-sub">8 customers with KYC documents expiring this week</div></div>
+                </div>
+                <div class="alert-item a-amber">
+                  <i class="bi bi-exclamation-triangle-fill" style="color:var(--c-amber);font-size:1rem;flex-shrink:0"></i>
+                  <div><div class="alert-title">Overdue Documents</div><div class="alert-sub">14 document requests pending beyond 5 days</div></div>
+                </div>
+              </div>
+              <div>
+                <div class="alert-item a-blue">
+                  <i class="bi bi-info-circle-fill" style="color:var(--c-blue);font-size:1rem;flex-shrink:0"></i>
+                  <div><div class="alert-title">Regulatory Update</div><div class="alert-sub">New RBI circular effective from next month — review pending</div></div>
+                </div>
+                <div class="alert-item a-green">
+                  <i class="bi bi-check-circle-fill" style="color:var(--c-green);font-size:1rem;flex-shrink:0"></i>
+                  <div><div class="alert-title">Monthly Audit Clear</div><div class="alert-sub">All 38 cases from last month cleared in audit</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPLIANCE CHECKLIST -->
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-clipboard2-check-fill card-icon" style="color:var(--c-amber)"></i>
+          <span class="card-title">Compliance Summary</span>
+        </div>
+        <div class="card-body">
+          <ul class="cl-list">
+            <li class="cl-item">
+              <div class="cl-dot" style="background:var(--c-amber)"></div>
+              <div class="cl-lbl">Total Cases</div>
+              <div class="cl-val" style="color:var(--c-amber)" id="cl_total">—</div>
+            </li>
+            <li class="cl-item">
+              <div class="cl-dot" style="background:var(--c-amber)"></div>
+              <div class="cl-lbl">Pending DD</div>
+              <div class="cl-val" style="color:var(--c-amber)" id="cl_pending">—</div>
+            </li>
+            <li class="cl-item">
+              <div class="cl-dot" style="background:var(--c-blue)"></div>
+              <div class="cl-lbl">Doc Requested</div>
+              <div class="cl-val" style="color:var(--c-blue)" id="cl_doc">—</div>
+            </li>
+            <li class="cl-item">
+              <div class="cl-dot" style="background:var(--c-red)"></div>
+              <div class="cl-lbl">Rejected</div>
+              <div class="cl-val" style="color:var(--c-red)" id="cl_reject">—</div>
+            </li>
+            <li class="cl-item">
+              <div class="cl-dot" style="background:var(--c-green)"></div>
+              <div class="cl-lbl">DD Cleared</div>
+              <div class="cl-val" style="color:var(--c-green)" id="cl_done">—</div>
+            </li>
+          </ul>
+          <div style="margin-top:1.2rem">
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;font-weight:700;color:var(--text-muted);margin-bottom:.4rem">
+              <span>Clearance Rate</span><span id="cl_rate_txt" style="color:var(--c-green)">—%</span>
+            </div>
+            <div style="height:8px;border-radius:4px;background:#e2e8f0;overflow:hidden">
+              <div id="cl_rate_bar" style="height:100%;border-radius:4px;background:var(--c-green);transition:width .7s ease;width:0%"></div>
+            </div>
+          </div>
+          <div style="margin-top:1.2rem">
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;font-weight:700;color:var(--text-muted);margin-bottom:.4rem">
+              <span>Rejection Rate</span><span id="cl_rej_txt" style="color:var(--c-red)">—%</span>
+            </div>
+            <div style="height:8px;border-radius:4px;background:#e2e8f0;overflow:hidden">
+              <div id="cl_rej_bar" style="height:100%;border-radius:4px;background:var(--c-red);transition:width .7s ease;width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <span>LOS Enterprise Suite &copy; 2025 — <strong>Compliance Dashboard</strong></span>
+    <span>v2.0 · Static Edition</span>
+  </footer>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.48.0/dist/apexcharts.min.js"></script>
+<script src="assets/js/dashboard.js"></script>
+<script>
+var demo = { dd_total:185, dd_pending:72, dd_doc:38, dd_rejected:11, dd_done:64 };
+
+function bindKPIs(d) {
+  LOS.animateNum(document.getElementById('dd_total_cases'), d.dd_total);
+  LOS.animateNum(document.getElementById('dd_pending'), d.dd_pending);
+  LOS.animateNum(document.getElementById('dd_doc_requested'), d.dd_doc);
+  LOS.animateNum(document.getElementById('dd_rejected'), d.dd_rejected);
+  LOS.animateNum(document.getElementById('dd_done'), d.dd_done);
+
+  // Status cards
+  document.getElementById('st_pending_review').textContent = d.dd_pending;
+  document.getElementById('st_docs_pending').textContent = d.dd_doc;
+  document.getElementById('st_cleared').textContent = d.dd_done;
+  document.getElementById('st_rejected').textContent = d.dd_rejected;
+
+  var vals = [d.dd_pending, d.dd_doc, d.dd_done, d.dd_rejected];
+  var mx = Math.max.apply(null,vals)||1;
+  ['stbar_review','stbar_docs','stbar_cleared','stbar_rejected'].forEach(function(id,i){
+    var el = document.getElementById(id);
+    if(el) el.style.width = Math.round(vals[i]/mx*100)+'%';
+  });
+
+  // Checklist
+  document.getElementById('cl_total').textContent = d.dd_total;
+  document.getElementById('cl_pending').textContent = d.dd_pending;
+  document.getElementById('cl_doc').textContent = d.dd_doc;
+  document.getElementById('cl_reject').textContent = d.dd_rejected;
+  document.getElementById('cl_done').textContent = d.dd_done;
+
+  var clearRate = d.dd_total ? Math.round(d.dd_done/d.dd_total*100) : 0;
+  var rejRate   = d.dd_total ? Math.round(d.dd_rejected/d.dd_total*100) : 0;
+  document.getElementById('cl_rate_txt').textContent = clearRate+'%';
+  document.getElementById('cl_rej_txt').textContent  = rejRate+'%';
+  document.getElementById('cl_rate_bar').style.width = clearRate+'%';
+  document.getElementById('cl_rej_bar').style.width  = rejRate+'%';
+}
+bindKPIs(demo);
+
+// Donut
+new ApexCharts(document.getElementById('chart-dd-donut'),{
+  chart:{type:'donut',height:250,fontFamily:"'Inter',sans-serif"},
+  series:[72,38,64,11],
+  labels:['Pending DD','Doc Pending','Cleared','Rejected'],
+  colors:['#d97706','#1d4ed8','#059669','#dc2626'],
+  plotOptions:{pie:{donut:{size:'60%'}}},
+  legend:{position:'bottom',fontSize:'11px'},dataLabels:{enabled:false}
+}).render();
+
+// Trend
+new ApexCharts(document.getElementById('chart-dd-trend'),{
+  chart:{type:'area',height:250,toolbar:{show:false},fontFamily:"'Inter',sans-serif"},
+  series:[
+    {name:'Received',data:[22,28,19,35,30,25,18]},
+    {name:'Cleared', data:[18,24,15,28,27,20,16]}
+  ],
+  xaxis:{categories:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],labels:{style:{colors:'#64748b',fontSize:'11px'}}},
+  colors:['#d97706','#059669'],
+  stroke:{curve:'smooth',width:2},
+  fill:{type:'gradient',gradient:{opacityFrom:.25,opacityTo:.02}},
+  legend:{position:'top',fontSize:'11px'},
+  grid:{borderColor:'#f1f5f9'},dataLabels:{enabled:false}
+}).render();
+
+function refreshData(){ bindKPIs(demo); }
+</script>
+</body>
+</html>
